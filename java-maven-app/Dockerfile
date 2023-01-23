@@ -9,14 +9,14 @@ WORKDIR /app
 
 #Copying the directory src from your current location to inside the container to app/src.
 
-COPY src .
+COPY . .
 
 #Copying the pox.xml into the container current directory (app).
 
 COPY pom.xml .
 
 #Installing all the dependecies with the command mvn verify.
-RUN mvn -e -B dependency:resolve
+
 RUN mvn package
 
 #----------------------------------------------
