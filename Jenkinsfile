@@ -52,12 +52,12 @@ pipeline {
                 }
             }
         }
-        
+
         stage ('Stage 2 - build the docker image') {
             steps {
 
-                sh "cd java-maven-app/"
-                sh 'echo pwd'
+                cd java-maven-app/
+                echo pwd
                 sh "docker build -t tomer:1.5.8 ."
             }
 
