@@ -53,6 +53,21 @@ pipeline {
                 }
             }
         }
+
+        stage ('Stage 2 - build the docker image') {
+            steps {
+
+                sh "cd java-maven-app/"
+                sh 'echo pwd'
+                sh "docker build -t tomer:1.5.8 ."
+            }
+
+
+
+
+        }
+
+
     // stage ('STAGE 2 find latest tag') {
     //   steps {
     //     sh 'git fetch --tags'
