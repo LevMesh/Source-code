@@ -27,8 +27,8 @@ pipeline {
                                 patch = (previousTag.tokenize(".")[2].toInteger() + 1).toString()
                                 }
                                 env.VERSION = majorMinor + "." + patch
-                                echo "env.version"
-                                echo "env.BRANCH_NAME"
+                                echo env.version
+                                echo env.BRANCH_NAME
                                 
                                 // sh "git checkout remotes/origin/release/${version}"
                                 // sh "git checkout release/${version}"
