@@ -5,36 +5,36 @@ pipeline {
 //     string defaultValue: '0', description: 'Release Version', name: 'version'
 //   }
 
-  stages {
-    stage('STAGE 1 check if branch exists') {
-        script {
-            if (env.BRANCH_NAME == 'main') {
-                echo '---------Hello from main branch--------------'
-            
-                steps {
-                    script {
-                    try {
-                        sh "git config --global user.email 'levmeshorer16@gmail.com'"
-                        sh "git config --global user.name 'Lev Meshorer (EC2 JENKINS)'"
+    stages {
+        stage('STAGE 1 check if branch exists') {
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'main') {
+                        echo '---------Hello from main branch--------------'
+                    
+                        script {
+                        try {
+                            sh "git config --global user.email 'levmeshorer16@gmail.com'"
+                            sh "git config --global user.name 'Lev Meshorer (EC2 JENKINS)'"
 
-                        // sh "git checkout remotes/origin/release/${version}"
-                        // sh "git checkout release/${version}"
-                        // sh "git pull origin release/${version}"
-                        echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~'
-                    } catch (Exception e) {
-                        sh 'git checkout main'
-                        sh "git checkout -b release/${version}"
-                        sh "echo ${version} > v.txt"
-                        sh "echo 'NOT FOR RELEASE' >> v.txt"
-                        sh "git commit -am 'Automated commit ${version}'"
-                        sh "git push origin release/${version}"
-                        echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
-                    }
+                            // sh "git checkout remotes/origin/release/${version}"
+                            // sh "git checkout release/${version}"
+                            // sh "git pull origin release/${version}"
+                            echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~'
+                        } catch (Exception e) {
+                            sh 'git checkout main'
+                            sh "git checkout -b release/${version}"
+                            sh "echo ${version} > v.txt"
+                            sh "echo 'NOT FOR RELEASE' >> v.txt"
+                            sh "git commit -am 'Automated commit ${version}'"
+                            sh "git push origin release/${version}"
+                            echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
+                        }
+                        }
                     }
                 }
             }
         }
-    }
     // stage ('STAGE 2 find latest tag') {
     //   steps {
     //     sh 'git fetch --tags'
@@ -69,7 +69,7 @@ pipeline {
     // stage ('STAGE 5 Release (push to ECR)') {
 
     // }
-  }
+    }
 
   post {
     always {
