@@ -31,23 +31,23 @@ pipeline {
                                 env.VERSION = majorMinor + "." + patch
                                 echo env.version
                                 echo env.BRANCH_NAME
-                                cd java-maven-app/
+                                // cd java-maven-app/
 
-                                sh "docker build -t tomer:$env.version ." 
+                                // sh "docker build -t tomer:$env.version ." 
 
                                 // sh "git checkout remotes/origin/release/${version}"
                                 // sh "git checkout release/${version}"
                                 // sh "git pull origin release/${version}"
                                 echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~~'
-                            } catch (Exception e) {
-                                sh 'git checkout main'
-                                sh "git checkout -b release/${version}"
-                                sh "echo ${version} > v.txt"
-                                sh "echo 'NOT FOR RELEASE' >> v.txt"
-                                sh "git commit -am 'Automated commit ${version}'"
-                                sh "git push origin release/${version}"
-                                echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
-                            }
+                            // } catch (Exception e) {
+                            //     sh 'git checkout main'
+                            //     sh "git checkout -b release/${version}"
+                            //     sh "echo ${version} > v.txt"
+                            //     sh "echo 'NOT FOR RELEASE' >> v.txt"
+                            //     sh "git commit -am 'Automated commit ${version}'"
+                            //     sh "git push origin release/${version}"
+                            //     echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
+                            // }
                         }
                     }
                 }
