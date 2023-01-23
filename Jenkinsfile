@@ -33,7 +33,7 @@ pipeline {
                                 // sh "git checkout remotes/origin/release/${version}"
                                 // sh "git checkout release/${version}"
                                 // sh "git pull origin release/${version}"
-                                echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~'
+                                echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~~'
                             } catch (Exception e) {
                                 sh 'git checkout main'
                                 sh "git checkout -b release/${version}"
