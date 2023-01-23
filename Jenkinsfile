@@ -20,7 +20,9 @@ pipeline {
                                 sh "git config --global user.name 'Lev Meshorer (EC2 JENKINS)'"
                                 sh "git fetch --tags"
                                 majorMinor = sh(script: "git tag -l --sort=v:refname | tail -1 | cut -c 1-3", returnStdout: true).trim()
+                                echo "$majorMinor"
                                 previousTag = sh(script: "git describe --tags --abbrev=0 | grep -E '^$majorMinor' || true", returnStdout: true).trim()  // x.y.z or empty string. grep is used to prevent returning a tag from another release branch; true is used to not fail the pipeline if grep returns nothing.
+                                echo "$previousTag"
                                 if (!previousTag) {
                                 patch = "0"
                                 } else {
