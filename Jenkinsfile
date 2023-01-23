@@ -90,10 +90,10 @@ pipeline {
     // }
     }
 
-  post {
-    always {
-      //sh 'docker rm -f app'
-      cleanWs()
-    }
-  }
+//   post {
+//     always {
+//       //sh 'docker rm -f app'
+//       cleanWs()
+//     }
+//   }
 }
