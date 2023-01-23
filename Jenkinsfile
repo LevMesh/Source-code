@@ -38,7 +38,7 @@ pipeline {
                                 // sh "git checkout remotes/origin/release/${version}"
                                 // sh "git checkout release/${version}"
                                 // sh "git pull origin release/${version}"
-                                echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~~'
+                                // echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~~'
                             // } catch (Exception e) {
                             //     sh 'git checkout main'
                             //     sh "git checkout -b release/${version}"
@@ -48,12 +48,12 @@ pipeline {
                             //     sh "git push origin release/${version}"
                             //     echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
                             // }
+                            }
                         }
                     }
                 }
             }
         }
-
         stage ('Stage 2 - build the docker image') {
             steps {
 
@@ -102,6 +102,7 @@ pipeline {
     // stage ('STAGE 5 Release (push to ECR)') {
 
     // }
+    
     }
 
 //   post {
