@@ -13,24 +13,22 @@ pipeline {
                         echo '---------Hello from main branch--------------'
                     
                         script {
-                        
-
-                            try {
-                                sh "git config --global user.email 'levmeshorer16@gmail.com'"
-                                sh "git config --global user.name 'Lev Meshorer (EC2 JENKINS)'"
-                                sh "git fetch --tags"
-                                majorMinor = sh(script: "git tag -l --sort=v:refname | tail -1 | cut -c 1-3", returnStdout: true).trim()
-                                echo "$majorMinor"
-                                previousTag = sh(script: "git describe --tags --abbrev=0 | grep -E '^$majorMinor' || true", returnStdout: true).trim()  // x.y.z or empty string. grep is used to prevent returning a tag from another release branch; true is used to not fail the pipeline if grep returns nothing.
-                                echo "$previousTag"
-                                if (!previousTag) {
-                                patch = "0"
-                                } else {
-                                patch = (previousTag.tokenize(".")[2].toInteger() + 1).toString()
-                                }
-                                env.VERSION = majorMinor + "." + patch
-                                echo env.version
-                                echo env.BRANCH_NAME
+                    
+                            sh "git config --global user.email 'levmeshorer16@gmail.com'"
+                            sh "git config --global user.name 'Lev Meshorer (EC2 JENKINS)'"
+                            sh "git fetch --tags"
+                            majorMinor = sh(script: "git tag -l --sort=v:refname | tail -1 | cut -c 1-3", returnStdout: true).trim()
+                            echo "$majorMinor"
+                            previousTag = sh(script: "git describe --tags --abbrev=0 | grep -E '^$majorMinor' || true", returnStdout: true).trim()  // x.y.z or empty string. grep is used to prevent returning a tag from another release branch; true is used to not fail the pipeline if grep returns nothing.
+                            echo "$previousTag"
+                            if (!previousTag) {
+                            patch = "0"
+                            } else {
+                            patch = (previousTag.tokenize(".")[2].toInteger() + 1).toString()
+                            }
+                            env.VERSION = majorMinor + "." + patch
+                            echo env.version
+                            echo env.BRANCH_NAME
                                 // cd java-maven-app/
 
                                 // sh "docker build -t tomer:$env.version ." 
@@ -48,12 +46,13 @@ pipeline {
                             //     sh "git push origin release/${version}"
                             //     echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
                             // }
-                            }
+                            
                         }
                     }
                 }
             }
         }
+        
         stage ('Stage 2 - build the docker image') {
             steps {
 
@@ -102,7 +101,7 @@ pipeline {
     // stage ('STAGE 5 Release (push to ECR)') {
 
     // }
-    
+
     }
 
 //   post {
