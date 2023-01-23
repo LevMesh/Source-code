@@ -13,23 +13,36 @@ pipeline {
                         echo '---------Hello from main branch--------------'
                     
                         script {
-                        try {
-                            sh "git config --global user.email 'levmeshorer16@gmail.com'"
-                            sh "git config --global user.name 'Lev Meshorer (EC2 JENKINS)'"
+                        
 
-                            // sh "git checkout remotes/origin/release/${version}"
-                            // sh "git checkout release/${version}"
-                            // sh "git pull origin release/${version}"
-                            echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~'
-                        } catch (Exception e) {
-                            sh 'git checkout main'
-                            sh "git checkout -b release/${version}"
-                            sh "echo ${version} > v.txt"
-                            sh "echo 'NOT FOR RELEASE' >> v.txt"
-                            sh "git commit -am 'Automated commit ${version}'"
-                            sh "git push origin release/${version}"
-                            echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
-                        }
+                            try {
+                                sh "git config --global user.email 'levmeshorer16@gmail.com'"
+                                sh "git config --global user.name 'Lev Meshorer (EC2 JENKINS)'"
+
+                                majorMinor = sh(script: "git tag -l --sort=v:refname | tail -1 | cut -c 1-3", returnStdout: true).trim()
+                                previousTag = sh(script: "git describe --tags --abbrev=0 | grep -E '^$majorMinor' || true", returnStdout: true).trim()  // x.y.z or empty string. grep is used to prevent returning a tag from another release branch; true is used to not fail the pipeline if grep returns nothing.
+                                if (!previousTag) {
+                                patch = "0"
+                                } else {
+                                patch = (previousTag.tokenize(".")[2].toInteger() + 1).toString()
+                                }
+                                env.VERSION = majorMinor + "." + patch
+                                echo "env.version"
+                                echo "env.BRANCH_NAME"
+                                
+                                // sh "git checkout remotes/origin/release/${version}"
+                                // sh "git checkout release/${version}"
+                                // sh "git pull origin release/${version}"
+                                echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~'
+                            } catch (Exception e) {
+                                sh 'git checkout main'
+                                sh "git checkout -b release/${version}"
+                                sh "echo ${version} > v.txt"
+                                sh "echo 'NOT FOR RELEASE' >> v.txt"
+                                sh "git commit -am 'Automated commit ${version}'"
+                                sh "git push origin release/${version}"
+                                echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
+                            }
                         }
                     }
                 }
