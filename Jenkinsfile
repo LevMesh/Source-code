@@ -59,6 +59,7 @@ pipeline {
 
                     sh 'cd java-maven-app/'
                     sh 'pwd'
+                    sh 'ls'
                     sh 'docker build -t tomer:1.5.8 .'
                 }
             }
