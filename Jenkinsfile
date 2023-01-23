@@ -57,7 +57,8 @@ pipeline {
             steps {
                 script {
 
-                    sh 'cd java-maven-app/'
+                    sh "cd java-maven-app/"
+                    sh "ls java-maven-app/"
                     sh 'pwd'
                     sh 'ls'
                     sh 'docker build -t tomer:1.5.8 .'
