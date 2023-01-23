@@ -1,9 +1,9 @@
 pipeline {
   agent any
 
-  parameters {
-    string defaultValue: '0', description: 'Release Version', name: 'version'
-  }
+//   parameters {
+//     string defaultValue: '0', description: 'Release Version', name: 'version'
+//   }
 
   stages {
     stage('STAGE 1 check if branch exists') {
