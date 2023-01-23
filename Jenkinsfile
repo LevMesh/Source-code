@@ -32,6 +32,8 @@ pipeline {
                                 echo env.version
                                 echo env.BRANCH_NAME
                                 sh 'cd java-maven-app/'
+                                echo pwd 
+                                echo ls
                                 sh "docker build -t tomer:$env.version ." 
 
                                 // sh "git checkout remotes/origin/release/${version}"
