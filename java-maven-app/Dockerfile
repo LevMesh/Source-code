@@ -9,8 +9,8 @@ WORKDIR /app
 
 #Copying the directory src from your current location to inside the container to app/src.
 
-COPY java-maven-app/pom.xml .
-COPY java-maven-app/src .
+COPY pom.xml .
+COPY src .
 
 #Copying the pox.xml into the container current directory (app).
 
