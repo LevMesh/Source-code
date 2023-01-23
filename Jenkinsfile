@@ -64,10 +64,6 @@ pipeline {
                     sh 'docker build -t tomer:1.5.8 .'
                 }
             }
-
-
-
-
         }
 
 

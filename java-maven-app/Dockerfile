@@ -9,11 +9,11 @@ WORKDIR /app
 
 #Copying the directory src from your current location to inside the container to app/src.
 
-COPY . .
+COPY java-maven-app/src/ .
 
 #Copying the pox.xml into the container current directory (app).
 
-COPY pom.xml .
+COPY java-maven-app/pom.xml .
 
 #Installing all the dependecies with the command mvn verify.
 
