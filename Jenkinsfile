@@ -56,7 +56,9 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "docker login --username=$USERNAME --password=$PASSWORD"
                     sh "docker push levvv/java-maven-app:$env.VERSION"
-                    sh "git tag $env.VERSION"
+                    //sh "echo TAG=$env.VERSION > version.txt"
+                    //sh "git tag $env.VERSION"
+                    sh "git tag -a ${env.VERSION} -m 'version ${env.VERSION}'"
                     sh "git push --tag"
                 }
             }
