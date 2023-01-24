@@ -62,8 +62,8 @@ pipeline {
                     sh 'pwd'
                     sh 'ls'
                     sh "docker build -t levvv/java-maven-app:$env.version java-maven-app/"
-                    withCredentials([[$class: "UsernamePasswordMultiBinding", credentialsId: "28010381-59f2-49ac-a34a-b5d02d354162", usernameVariable: "G_USER", passwordVariable: "G_PASS"]]) {
-                        sh "docker login --username=$G_USER --password=$G_PASS"
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login --username=$USERNAME --password=$PASSWORD"
 
                         sh "docker push levvv/java-maven-app:$env.version"
                     }
