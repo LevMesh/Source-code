@@ -51,7 +51,7 @@ pipeline {
 
         stage ('Stage 3 - Publish to DockerHub') {
             steps {
-                sh "docker tag levvv/java-maven-app:latest levvv/java-maven-app:$env.VERSIONF"
+                sh "docker tag levvv/java-maven-app:latest levvv/java-maven-app:$env.VERSION"
 
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "docker login --username=$USERNAME --password=$PASSWORD"
@@ -65,10 +65,11 @@ pipeline {
             steps {
                 sh "git clone git@github.com:LevMesh/Source-code-Deployment.git"
                 sh "sed -i 's/tag: .*/tag: ${env.VERSION}/g' Source-code-Deployment/k8s/my-app/values.yaml"
-                sh 'git add .'
-                sh "git commit -am 'Automated commit by Jenkins'"
-                sh 'git push'
-                sh ""
+                dir('Source-code-Deployment') {
+                    sh 'git add .'
+                    sh "git commit -am 'Automated commit by Jenkins'"
+                    sh 'git push'
+                }
             }
         }
 
@@ -118,7 +119,7 @@ pipeline {
   post {
     always {
       sh 'docker rm -f testingjava'
-      cleanWs()
+    //   cleanWs()
     }
   }
 }
