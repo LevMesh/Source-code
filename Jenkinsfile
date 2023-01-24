@@ -56,6 +56,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "docker login --username=$USERNAME --password=$PASSWORD"
                     sh "docker push levvv/java-maven-app:$env.VERSION"
+                    sh "git tag $env.VERSION"
                 }
             }
         }
@@ -66,6 +67,7 @@ pipeline {
                 sh 'git add .'
                 sh "git commit -am 'Automated commit by Jenkins'"
                 sh 'git push'
+                sh ""
             }
         }
 
