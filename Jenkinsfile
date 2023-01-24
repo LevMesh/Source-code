@@ -119,7 +119,7 @@ pipeline {
   post {
     always {
       sh 'docker rm -f testingjava'
-    //   cleanWs()
+      cleanWs()
     }
   }
 }
