@@ -6,14 +6,28 @@ pipeline {
 //   }
 
     stages {
+
+        stage ('Stage 1 - Build the docker image') {
+            steps {
+                script {
+                    sh "docker build -t levvv/java-maven-app:latest java-maven-app/"
+                }
+            }
+        }
+        stage ('Stage 2 - Run & test the image') {
+            steps {
+
+                sh "docker run -d -p 8085:8080 --name Testing-java levvv/java-maven-app:latest"
+                sh 'wget --tries=10 --waitretry=5 --retry-connrefused -O- Testing-java:8085'
+
+            }
+        }
         stage('STAGE 1 check if branch exists') {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'main') {
-                        echo '---------Hello from main branch--------------'
-                    
+                        echo '---------Hello from main branch--------------'  
                         script {
-                    
                             sh "git config --global user.email 'levmeshorer16@gmail.com'"
                             sh "git config --global user.name 'Lev Meshorer (EC2 JENKINS)'"
                             sh "git fetch --tags"
@@ -29,48 +43,22 @@ pipeline {
                             env.VERSION = majorMinor + "." + patch
                             echo env.version
                             echo env.BRANCH_NAME
-                                // cd java-maven-app/
-
-                                // sh "docker build -t tomer:$env.version ." 
-
-                                // sh "git checkout remotes/origin/release/${version}"
-                                // sh "git checkout release/${version}"
-                                // sh "git pull origin release/${version}"
-                                // echo '~~~~~~~~~ BRANCH EXISTS - checkout & pull ~~~~~~~~~~'
-                            // } catch (Exception e) {
-                            //     sh 'git checkout main'
-                            //     sh "git checkout -b release/${version}"
-                            //     sh "echo ${version} > v.txt"
-                            //     sh "echo 'NOT FOR RELEASE' >> v.txt"
-                            //     sh "git commit -am 'Automated commit ${version}'"
-                            //     sh "git push origin release/${version}"
-                            //     echo '~~~~~~~~~ BRANCH NOT EXISTS - created branch & pushed ~~~~~~~~~'
-                            // }
-                            
                         }
                     }
                 }
             }
         }
 
-        stage ('Stage 2 - build the docker image') {
+        stage ('Stage 3 - Publish to DockerHub') {
             steps {
-                script {
+                sh "docker tag levvv/java-maven-app:latest levvv/java-maven-app:$env.version"
 
-                    sh "cd java-maven-app/"
-                    sh "ls java-maven-app/"
-                    sh 'pwd'
-                    sh 'ls'
-                    sh "docker build -t levvv/java-maven-app:$env.version java-maven-app/"
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login --username=$USERNAME --password=$PASSWORD"
-
-                        sh "docker push levvv/java-maven-app:$env.version"
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "docker login --username=$USERNAME --password=$PASSWORD"
+                    sh "docker push levvv/java-maven-app:$env.version"
                 }
             }
         }
-
 
 
 
@@ -114,10 +102,10 @@ pipeline {
 
     }
 
-//   post {
-//     always {
-//       //sh 'docker rm -f app'
-//       cleanWs()
-//     }
-//   }
+  post {
+    always {
+      sh 'docker rm -f Testing-java'
+      cleanWs()
+    }
+  }
 }
