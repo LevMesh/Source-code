@@ -61,7 +61,7 @@ pipeline {
                     sh "ls java-maven-app/"
                     sh 'pwd'
                     sh 'ls'
-                    sh "docker build -t java-maven-app:$env.version java-maven-app/"
+                    sh "docker build -t levvv/java-maven-app:$env.version java-maven-app/"
                     sh "docker push levvv/java-maven-app:$env.version"
 
                 }
