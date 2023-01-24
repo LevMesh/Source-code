@@ -57,6 +57,7 @@ pipeline {
                     sh "docker login --username=$USERNAME --password=$PASSWORD"
                     sh "docker push levvv/java-maven-app:$env.VERSION"
                     sh "git tag $env.VERSION"
+                    sh "git push --tag"
                 }
             }
         }
