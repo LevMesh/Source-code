@@ -17,8 +17,8 @@ pipeline {
         stage ('Stage 2 - Run & test the image') {
             steps {
 
-                sh "docker run -d -p 8085:8080 --name Testing-java levvv/java-maven-app:latest"
-                sh 'wget --tries=10 --waitretry=5 --retry-connrefused -O- Testing-java:8085'
+                sh "docker run -d -p 8085:8080 --name testingjava --network cowsay_1_jenkins-net levvv/java-maven-app:latest"
+                sh 'wget --tries=10 --waitretry=5 --retry-connrefused -O- testingjava:8080'
 
             }
         }
@@ -51,14 +51,24 @@ pipeline {
 
         stage ('Stage 3 - Publish to DockerHub') {
             steps {
-                sh "docker tag levvv/java-maven-app:latest levvv/java-maven-app:$env.version"
+                sh "docker tag levvv/java-maven-app:latest levvv/java-maven-app:$env.VERSIONF"
 
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "docker login --username=$USERNAME --password=$PASSWORD"
-                    sh "docker push levvv/java-maven-app:$env.version"
+                    sh "docker push levvv/java-maven-app:$env.VERSION"
                 }
             }
         }
+        stage ('Stage 4 - Editing the helm chart') {
+            steps {
+                sh "git clone git@github.com:LevMesh/Source-code-Deployment.git"
+                sh "sed -i 's/tag: .*/tag: ${env.VERSION}/g' Source-code-Deployment/k8s/my-app/values.yaml"
+                sh 'git add .'
+                sh "git commit -am 'Automated commit by Jenkins'"
+                sh 'git push'
+            }
+        }
+
 
 
 
@@ -104,7 +114,7 @@ pipeline {
 
   post {
     always {
-      sh 'docker rm -f Testing-java'
+      sh 'docker rm -f testingjava'
       cleanWs()
     }
   }
