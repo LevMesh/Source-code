@@ -85,6 +85,7 @@ pipeline {
     }
 
   
+  
   post ('CleanWorkspace'){
     always {
       sh 'docker rm -f testingjava'
