@@ -118,7 +118,7 @@ pipeline {
 
     }
 
-  post {
+  post ('CleanWorkspace'){
     always {
       sh 'docker rm -f testingjava'
       cleanWs()
