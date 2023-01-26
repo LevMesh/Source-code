@@ -89,6 +89,7 @@ pipeline {
     always {
       sh 'docker rm -f testingjava'
       cleanWs()
+      
     }
   }
 }
