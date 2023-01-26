@@ -22,6 +22,7 @@ pipeline {
 
             }
         }
+      
         stage('STAGE 1 check if branch exists') {
             steps {
                 script {
