@@ -77,12 +77,6 @@ pipeline {
                 }
             }
         }
-
-
-    // stage ('STAGE 5 Release (push to ECR)') {
-
-    // }
-
     }
 
   
